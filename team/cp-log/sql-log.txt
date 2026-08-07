@@ -1,0 +1,1228 @@
+http:/team.localhost/admin/index.php?module=core_userGroup&_spAction=createAccessRecords
+
+http://team.smartprosoft.com/admin/index.php?module=core_userGroup&_spAction=createAccessRecords
+
+// ======== MOIN - 05/11/2020 =============== //
+ALTER TABLE `purchase_order` ADD `staff_id` INT(11) NULL;
+ALTER TABLE `purchase_order` ADD `purchase_order_date` DATE NULL;
+ALTER TABLE `purchase_order` ADD `payment_status` VARCHAR( 100 ) NULL;
+ALTER TABLE `purchase_order` ADD `title` VARCHAR( 100 ) NULL;
+ALTER TABLE `purchase_order` ADD `priority` VARCHAR( 100 ) NULL;
+ALTER TABLE `purchase_order` ADD `follow_up_date` DATE NULL;
+ALTER TABLE `purchase_order` ADD `notes` TEXT NULL;
+ALTER TABLE `purchase_order` ADD `supplier_inv_code` VARCHAR( 100 ) NULL;
+ALTER TABLE `po_product` ADD `cost_price` DECIMAL( 10, 2 ) NULL;
+ALTER TABLE `po_product` ADD `selling_price` DECIMAL( 10, 2 ) NULL;
+ALTER TABLE `po_product` ADD `qty_requested` INT(11) NULL;
+ALTER TABLE `product` ADD `item_code` VARCHAR( 100 ) NULL;
+ALTER TABLE `po_product` ADD `qty` INT(11) NULL;
+ALTER TABLE `po_product` ADD `product_id` INT(11) NULL;
+ALTER TABLE `po_product` ADD `supplier_id` INT(11) NULL;
+
+CREATE TABLE IF NOT EXISTS `product_company` (
+  `product_company_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`product_company_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `product` ADD `description_short` TEXT NULL;
+ALTER TABLE `product` ADD `general_quotation` INT(11) NULL;
+ALTER TABLE `product` ADD `unit` VARCHAR( 100 ) NULL;
+ALTER TABLE `product` ADD `product_group_id` INT(11) NULL;
+ALTER TABLE `product` ADD `modified_by` VARCHAR( 100 ) NULL;
+ALTER TABLE `product` ADD `created_by` VARCHAR( 100 ) NULL;
+ALTER TABLE `product` ADD `part_number` VARCHAR( 100 ) NULL;
+ALTER TABLE `product` ADD `price_from_supplier` DECIMAL( 10, 2 ) NULL;
+ALTER TABLE `product` ADD `section_id` INT(11) NULL;
+
+CREATE TABLE IF NOT EXISTS `stock_transfer` (
+  `stock_transfer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_project_id` int(11) DEFAULT NULL,
+  `to_project_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`stock_transfer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `expense` ADD `from_purchase_order` INT(11) NULL;
+ALTER TABLE `purchase_order` ADD `gst` DECIMAL( 10, 2 ) NULL;
+
+ALTER TABLE `project_staff` ADD `active_in_project` INT(1) NULL AFTER `modification_date`;
+
+CREATE TABLE IF NOT EXISTS `booking` (
+  `booking_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) DEFAULT NULL,
+  `employee_id` int(11) DEFAULT NULL,
+  `assign_time` time DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`booking_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `booking_service` (
+  `booking_service_id` int(11) NOT NULL AUTO_INCREMENT,
+  `booking_id` int(11) DEFAULT NULL,
+  `service` VARCHAR(100) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`booking_service_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `booking` ADD `gps_parameter` VARCHAR( 100 ) NULL;
+ALTER TABLE `booking` ADD `status` VARCHAR( 100 ) NULL;
+ALTER TABLE `booking` ADD `booking_date` date DEFAULT NULL;
+
+CREATE TABLE `supplier_order` (
+  `supplier_order_id` int(11) NOT NULL,
+  `date` date DEFAULT NULL,
+  `so_code` varchar(25) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `flag` int(1) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `supplier_order_history` (
+  `supplier_order_history_id` int(11) NOT NULL,
+  `supplier_order_id` int(11) DEFAULT NULL,
+  `purchase_order_id` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `supplier_receipt` (
+  `supplier_receipt_id` int(11) NOT NULL,
+  `receipt_code` varchar(55) DEFAULT NULL,
+  `amount` float(10,2) DEFAULT NULL,
+  `mode_of_payment` varchar(55) DEFAULT NULL,
+  `remarks` text,
+  `date` date DEFAULT NULL,
+  `published` tinyint(4) DEFAULT NULL,
+  `flag` tinyint(4) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `receipt_status` varchar(100) DEFAULT NULL,
+  `cheque_date` date DEFAULT NULL,
+  `bank_name` varchar(500) DEFAULT NULL,
+  `issued_by` varchar(300) DEFAULT NULL,
+  `cheque_no` int(11) DEFAULT NULL,
+  `coi_no` varchar(100) DEFAULT NULL,
+  `company_contact_salutation` varchar(10) DEFAULT NULL,
+  `company_contact_name` varchar(255) DEFAULT NULL,
+  `cust_first_name` varchar(255) DEFAULT NULL,
+  `cust_email` varchar(50) DEFAULT NULL,
+  `cust_address1` varchar(100) DEFAULT NULL,
+  `cust_address2` varchar(100) DEFAULT NULL,
+  `cust_address_po_code` varchar(10) DEFAULT NULL,
+  `cust_address_country_code` varchar(2) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL,
+  `advance_payment_used` decimal(10,2) DEFAULT NULL,
+   PRIMARY KEY (`supplier_receipt_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `supplier_receipt_history` (
+  `supplier_receipt_history_id` int(11) NOT NULL,
+  `purchase_order_id` int(11) DEFAULT NULL,
+  `supplier_receipt_id` int(11) DEFAULT NULL,
+  `published` tinyint(4) DEFAULT NULL,
+  `flag` tinyint(4) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `purchase_order_date` date DEFAULT NULL,
+  `invoice_paid_status` varchar(500) DEFAULT NULL,
+  `title` varchar(300) DEFAULT NULL,
+  `installment_id` int(11) DEFAULT NULL,
+  `receipt_type` varchar(25) DEFAULT NULL,
+  `related_purchase_order_id` int(11) DEFAULT NULL,
+   PRIMARY KEY (`supplier_receipt_history_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+ALTER TABLE `po_product` ADD `damage_qty` INT(11) NULL;
+
+ALTER TABLE `staff` ADD `employee_id` INT(11) NULL AFTER `joined_date`;
+
+ALTER TABLE `company` ADD `latitude` VARCHAR(255) NULL, 
+ADD `longitude` VARCHAR(255) NULL;
+
+ALTER TABLE `booking` ADD `latitude` VARCHAR(255) NULL, 
+ADD `longitude` VARCHAR(255) NULL;
+
+ALTER TABLE `quote` ADD `project_location` VARCHAR(255) NULL, 
+ADD `project_reference` VARCHAR(255) NULL;
+
+CREATE TABLE `sub_con` (
+  `sub_con_id` int(11) NOT NULL,
+  `company_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `address_street` text DEFAULT NULL,
+  `address_town` varchar(255) DEFAULT NULL,
+  `address_state` varchar(255) DEFAULT NULL,
+  `address_country` varchar(255) DEFAULT NULL,
+  `address_po_code` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `mobile` varchar(100) DEFAULT NULL,
+  `flag` int(1) DEFAULT NULL,
+  `address_flat` varchar(255) DEFAULT NULL,
+  `status` varchar(25) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
+  `category` varchar(50) DEFAULT NULL,
+  `comment_by` text DEFAULT NULL,
+  `company_size` varchar(20) DEFAULT NULL,
+  `industry` varchar(255) DEFAULT NULL,
+  `source` varchar(255) DEFAULT NULL,
+  `group_name` varchar(255) DEFAULT NULL,
+  `supplier_type` varchar(255) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `chi_company_name` varchar(255) DEFAULT NULL,
+  `chi_company_address` text DEFAULT NULL,
+  `company_address_id` int(11) DEFAULT NULL,
+  `contact_person` varchar(255) DEFAULT NULL,
+  `billing_address_flat` varchar(255) DEFAULT NULL,
+  `billing_address_street` varchar(255) DEFAULT NULL,
+  `billing_address_country` varchar(255) DEFAULT NULL,
+  `billing_address_po_code` varchar(255) DEFAULT NULL,
+  `gst_no` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`sub_con_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `sub_con_payments` (
+  `sub_con_payments_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+  `sub_con_id` int(11) DEFAULT NULL,
+  `work_order` varchar(255) DEFAULT NULL,
+  `amount` float(10,2) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `mode_of_payment` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`sub_con_payments_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `sub_con_work_order` (
+  `sub_con_work_order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sub_con_worker_code` varchar(255) DEFAULT NULL,
+  `work_order_date` date DEFAULT NULL,
+  `work_order_due_date` date DEFAULT NULL,
+  `completed_date` date DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `sub_con_id` int(11) DEFAULT NULL,
+  `work_order` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`sub_con_work_order_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `sub_con_payments_history` (
+  `sub_con_payments_history_id` int(11) NOT NULL,
+  `sub_con_work_order_id` int(11) DEFAULT NULL,
+  `sub_con_payments_id` int(11) DEFAULT NULL,
+  `published` tinyint(4) DEFAULT NULL,
+  `flag` tinyint(4) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `work_order_date` date DEFAULT NULL,
+  `invoice_paid_status` varchar(500) DEFAULT NULL,
+  `title` varchar(300) DEFAULT NULL,
+  `receipt_type` varchar(25) DEFAULT NULL,
+  `related_sub_con_work_order_id` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE `work_order_line_items` (
+  `work_order_line_items_id` int(11) NOT NULL,
+  `quote_category_id` int(10) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `amount_other` decimal(10,0) DEFAULT NULL,
+  `item_type` varchar(200) DEFAULT NULL,
+  `sort_order` int(10) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `title` text DEFAULT NULL,
+  `sub_con_work_order_id` int(11) DEFAULT NULL,
+  `actual_amount` int(11) DEFAULT NULL,
+  `supplier_amount` int(11) DEFAULT NULL,
+  `quantity` varchar(200) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `unit` varchar(25) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `part_no` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+// ======== ANSARI - 18/12/2020 =============== //
+ALTER TABLE `invoice` ADD `project_location` VARCHAR(255) NULL, 
+ADD `project_reference` VARCHAR(255) NULL;
+
+ALTER TABLE `invoice` ADD `quote_code` VARCHAR(50) DEFAULT NULL;
+
+// ======== MOIN - 18/12/2020 =============== //
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('nextWOCode', '1', 'Using this number work order code is generated', 'Number Field', NOW(), 1),
+('wOCodePrefix', 'VIR/WO/', 'Using this number receipt code is generated', 'Number Field', NOW(), 1);
+
+ALTER TABLE `sub_con_work_order` ADD `project_location` VARCHAR(255) NULL, 
+ADD `project_reference` VARCHAR(255) NULL;
+
+ALTER TABLE `sub_con_work_order` ADD `condition` text NULL;
+
+ALTER TABLE `employee` ADD `project_designation` VARCHAR(255) NULL, 
+ADD `team` VARCHAR(255) NULL;
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('projectDesignation', 'Manager', NOW()),
+('projectDesignation', 'Supervisor', NOW()),
+('projectDesignation', 'Employee', NOW());
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('team', 'team A', NOW()),
+('team', 'team B', NOW()),
+('team', 'team C', NOW()),
+('team', 'team D', NOW());
+
+ALTER TABLE `work_order_line_items` CHANGE `amount_other` `unit_rate` DECIMAL(10,0) NULL DEFAULT NULL;
+
+ALTER TABLE `sub_con_work_order` ADD `quote_date` date NULL, 
+ADD `quote_reference` VARCHAR(255) NULL;
+
+// ======== ANSARI - 21/12/2020 =============== //
+ALTER TABLE `quote_items` ADD `title` text DEFAULT NULL;
+ALTER TABLE `quote_items` ADD `unit_price` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `quote` ADD `discount` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `quote` ADD `gst` int(11) DEFAULT NULL;
+ALTER TABLE `quote` ADD `payment_method` varchar(50) DEFAULT NULL;
+
+// ======== ANSARI - 22/12/2020 =============== //
+ALTER TABLE `order_item` ADD `quote_id` int(11) DEFAULT NULL;
+ALTER TABLE `invoice` CHANGE `payment_terms` `payment_terms` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `order` ADD `cust_fax` varchar(25) DEFAULT NULL; 
+ALTER TABLE `order` ADD `shipping_fax` varchar(25) DEFAULT NULL; 
+ALTER TABLE `invoice_item` ADD `amount` decimal(10,2) DEFAULT NULL;
+
+// ======== ANSARI - 26/12/2020 =============== //
+  CREATE TABLE `project_claim` (
+    `project_claim_id` int(11) NOT NULL,
+    `claim_no` varchar(100) DEFAULT NULL,
+    `project_id` int(11) DEFAULT NULL,
+    `client_id` int(11) DEFAULT NULL,
+    `project_title` varchar(255) DEFAULT NULL,
+    `description` text DEFAULT NULL,
+    `po_quote_no` varchar(150) DEFAULT NULL,
+    `ref_no` varchar(150) DEFAULT NULL,
+    `claim_date` date DEFAULT NULL,
+    `status` varchar(100) DEFAULT NULL,
+    `amount` decimal(10,2) DEFAULT NULL,
+    `created_by` varchar(100) DEFAULT NULL,
+    `creation_date` datetime DEFAULT NULL,
+    `modified_by` varchar(100) DEFAULT NULL,
+    `modification_date` datetime DEFAULT NULL,
+    PRIMARY KEY (`project_claim_id`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+  CREATE TABLE `claim_line_items` (
+    `claim_line_items_id` int(11) NOT NULL,
+    `project_claim_id` int(11) DEFAULT NULL,
+    `title` text DEFAULT NULL,
+    `description` text DEFAULT NULL,
+    `amount` decimal(10,2) DEFAULT NULL,
+    `amount_other` decimal(10,2) DEFAULT NULL,
+    `item_type` varchar(200) DEFAULT NULL,
+    `sort_order` int(10) DEFAULT NULL,
+    `creation_date` datetime DEFAULT NULL,
+    `modification_date` datetime DEFAULT NULL,
+    `quantity` varchar(200) DEFAULT NULL,
+    `project_id` int(11) DEFAULT NULL,
+    `created_by` varchar(100) DEFAULT NULL,
+    `modified_by` varchar(100) DEFAULT NULL,
+    `unit` varchar(25) DEFAULT NULL,
+    `remarks` text DEFAULT NULL,
+    PRIMARY KEY (`claim_line_items_id`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+  CREATE TABLE `claim_payment` (
+    `claim_payment_id` int(11) NOT NULL,
+    `project_claim_id` int(11) DEFAULT NULL,
+    `claim_line_items_id` int(11) DEFAULT NULL,
+    `date` date DEFAULT NULL,
+    `claim_seq` varchar(150) DEFAULT NULL,
+    `amount` decimal(10,2) DEFAULT NULL,
+    `project_id` int(11) DEFAULT NULL,
+    `created_by` varchar(100) DEFAULT NULL,
+    `creation_date` datetime DEFAULT NULL,
+    `modified_by` varchar(100) DEFAULT NULL,
+    `modification_date` datetime DEFAULT NULL,
+    PRIMARY KEY (`claim_payment_id`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+  ALTER TABLE `claim_payment` ADD `claim_amount` decimal(10,2) DEFAULT NULL;
+  ALTER TABLE `claim_payment` ADD `description` text DEFAULT NULL;
+  ALTER TABLE `claim_line_items` ADD `status` varchar(100) DEFAULT NULL;
+  ALTER TABLE `claim_payment` ADD `status` varchar(100) DEFAULT NULL;
+
+// ======== MOIN - 28/12/2020 =============== //
+  CREATE TABLE `opportunity_employee` (
+    `opportunity_employee_id` int(11) NOT NULL,
+    `opportunity_id` int(11) DEFAULT NULL,
+    `employee_id` int(11) DEFAULT NULL,
+    `category_type` varchar(255) DEFAULT NULL,
+    `creation_date` datetime DEFAULT NULL,
+    `modification_date` datetime DEFAULT NULL,
+    PRIMARY KEY (`opportunity_employee_id`)
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+ALTER TABLE `opportunity_employee` ADD `active_in_project` INT(1) NULL;
+
+// ======== ANSARI - 29/12/2020 =============== //
+ALTER TABLE `project_claim` ADD `variation_order_submission` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `project_claim` ADD `value_of_contract_work_done` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `project_claim` ADD `vo_claim_work_done` decimal(10,2) DEFAULT NULL;
+
+// ======== MOIN - 29/12/2020 =============== //
+CREATE TABLE IF NOT EXISTS `delivery_order` (
+  `delivery_order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`delivery_order_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `delivery_order_history` (
+  `delivery_order_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `purchase_order_id` int(11) DEFAULT NULL,
+  `delivery_order_id` int(11) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`delivery_order_history_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `delivery_order` ADD `purchase_order_id` INT(11) NULL;
+
+ALTER TABLE `delivery_order_history` ADD `remarks` text NULL;
+
+// ======== ANSARI - 30/12/2020 =============== //
+INSERT INTO `setting` (`description`, `key_text`, `value`, `creation_date`, `modification_date`, `group_name`, `value_type`, `show_to_user`, `chi_value`, `used_for_admin`, `used_for_www`, `flag`, `site_id`) VALUES
+('This is used to display the contact person name of the company in pdf signature.', 'cp.companyContactName', 'Mr. Benjamin Yun', '2020-12-30 20:51:25', '2020-12-30 20:53:49', NULL, 'Text Field', 1, NULL, NULL, NULL, 0, NULL);
+
+INSERT INTO `setting` (`description`, `key_text`, `value`, `creation_date`, `modification_date`, `group_name`, `value_type`, `show_to_user`, `chi_value`, `used_for_admin`, `used_for_www`, `flag`, `site_id`) VALUES
+('This is used to set claim code.', 'nextClaimCode', '1000', '2020-12-30 21:46:45', '2020-12-30 21:47:15', NULL, 'Text Field', 1, NULL, NULL, NULL, 0, NULL);
+
+ALTER TABLE `project_claim` ADD `claim_code` varchar(100) DEFAULT NULL;
+
+// ======== ANSARI - 31/12/2020 =============== //
+ALTER TABLE `claim_payment` ADD `gst` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `claim_payment` ADD `total_amount` decimal(10,2) DEFAULT NULL;
+
+// ======== MOIN - 31/12/2020 =============== //
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('nextQuoteCodeOpp', '100', 'Using this number quote code is generated in opportunity', 'Number Field', NOW(), 1);
+
+ALTER TABLE `quote` ADD `pdf_gst_no` VARCHAR(255) NULL, 
+ADD `pdf_company_phone` VARCHAR(255) NULL,
+ADD `pdf_company_fax` VARCHAR(255) NULL,
+ADD `pdf_company_email` VARCHAR(255) NULL,
+ADD `pdf_company_website` VARCHAR(255) NULL,
+ADD `pdf_company_address1` VARCHAR(255) NULL,
+ADD `pdf_company_address2` VARCHAR(255) NULL,
+ADD `pdf_company_address3` VARCHAR(255) NULL,
+ADD `pdf_company_name` VARCHAR(255) NULL;
+
+// ======== ANSARI - 02/01/2021 =============== //
+ALTER TABLE `purchase_order` ADD `gst_percentage` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `project_materials` ADD `product_id` int(11) DEFAULT NULL;
+ALTER TABLE `project_claim` ADD `less_previous_retention` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `quote` ADD `drawing_nos` tinyint(4) DEFAULT NULL;
+ALTER TABLE `quote` ADD `intro_quote` text DEFAULT NULL;
+ALTER TABLE `quote` ADD `our_reference` varchar(255) DEFAULT NULL;
+ALTER TABLE `quote_items` ADD `drawing_number` varchar(255) DEFAULT NULL;
+ALTER TABLE `quote_items` ADD `drawing_title` text DEFAULT NULL;
+ALTER TABLE `quote_items` ADD `drawing_revision` varchar(255) DEFAULT NULL;
+ALTER TABLE `quote` ADD `total_amount` decimal(10,2) DEFAULT NULL;
+ALTER TABLE `order_item` ADD `drawing_number` varchar(255) DEFAULT NULL;
+ALTER TABLE `order_item` ADD `drawing_title` text DEFAULT NULL;
+ALTER TABLE `order_item` ADD `drawing_revision` varchar(255) DEFAULT NULL;
+
+// ======== MOIN - 02/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `costing_summary` (
+  `costing_summary_id` int(11) NOT NULL AUTO_INCREMENT,
+  `po_code` varchar(100) DEFAULT NULL,
+  `invoice_code` varchar(100) DEFAULT NULL,
+  `delivery_date` date DEFAULT NULL,
+  `no_of_worker_used` varchar(100) DEFAULT NULL,
+  `no_of_days_worked` varchar(100) DEFAULT NULL,
+  `labour_rates_per_day` decimal(10,2) DEFAULT NULL,
+  `po_price` decimal(10,2) DEFAULT NULL,
+  `po_price_with_gst` decimal(10,2) DEFAULT NULL,
+  `invoiced_price` decimal(10,2) DEFAULT NULL,
+  `invoiced_price_with_gst` decimal(10,2) DEFAULT NULL,
+  `profit_percentage` decimal(10,2) DEFAULT NULL,
+  `profit` decimal(10,2) DEFAULT NULL,
+  `total_material_price` decimal(10,2) DEFAULT NULL,
+  `transport_charges` decimal(10,2) DEFAULT NULL,
+  `total_labour_charges` decimal(10,2) DEFAULT NULL,
+  `salesman_commission` decimal(10,2) DEFAULT NULL,
+  `finance_charges` decimal(10,2) DEFAULT NULL,
+  `office_overheads` decimal(10,2) DEFAULT NULL,
+  `other_charges` decimal(10,2) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`costing_summary_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `costing_summary_history` (
+  `costing_summary_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) DEFAULT NULL,
+  `sub_con_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `sketch` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `unit_price` decimal(10,2) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`costing_summary_history_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `costing_summary` ADD `total_cost` decimal(10,2) NULL;
+ALTER TABLE `costing_summary` ADD `project_id` int(11) NULL;
+ALTER TABLE `costing_summary_history` ADD `costing_summary_id` int(11) NULL;
+
+// ======== MOIN - 04/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `actual_costing_summary` (
+  `actual_costing_summary_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `costing_summary_id` int(11) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`actual_costing_summary_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+// ======== ANSARI - 04/01/2021 =============== //
+ALTER TABLE `quote` ADD `revision` varchar(100) DEFAULT NULL;
+
+// ======== ANSARI - 05/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `product_price` (
+  `product_price_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`product_price_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `product_price_history` (
+  `product_price_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_price_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `site_id` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`product_price_history_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ALTER TABLE `po_product` CHANGE `qty_requested` `qty_updated` INT(11) NULL DEFAULT NULL;
+
+INSERT INTO `setting` (`description`, `key_text`, `value`, `creation_date`, `modification_date`, `group_name`, `value_type`, `show_to_user`, `chi_value`, `used_for_admin`, `used_for_www`, `flag`, `site_id`) VALUES
+('This is used to add code for product.', 'nextProductItemCode', '1000', '2021-01-05 15:19:07', '2021-01-05 15:19:24', NULL, 'Text Field', 1, NULL, NULL, NULL, 0, NULL),
+('This is used to generate stock code for inventory.', 'inventoryCode', '1000', '2021-01-05 15:18:25', '2021-01-05 15:18:45', NULL, 'Text Field', 1, NULL, NULL, NULL, 0, NULL);
+
+ALTER TABLE `adjust_stock_log` ADD `current_stock` decimal(10,2) DEFAULT NULL;
+
+// ======== MOIN - 05/01/2021 =============== //
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('projectReportPercentage', '10', 'Using this project report % is calculated for orange color', 'Number Field', NOW(), 1);
+
+// ======== ANSARI - 06/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `materials_request` (
+  `materials_request_id` int(11) NOT NULL AUTO_INCREMENT,
+  `mr_code` varchar(15) DEFAULT NULL,
+  `company_id_supplier` int(11) DEFAULT NULL,
+  `contact_id_supplier` int(11) DEFAULT '0',
+  `delivery_terms` text,
+  `status` varchar(25) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `flag` tinyint(4) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `supplier_reference_no` varchar(100) DEFAULT NULL,
+  `our_reference_no` varchar(100) DEFAULT NULL,
+  `shipping_method` varchar(255) DEFAULT NULL,
+  `payment_terms` text,
+  `delivery_date` date DEFAULT NULL,
+  `mr_date` date DEFAULT NULL,
+  `shipping_address_flat` varchar(255) DEFAULT NULL,
+  `shipping_address_street` varchar(255) DEFAULT NULL,
+  `shipping_address_country` varchar(100) DEFAULT NULL,
+  `shipping_address_po_code` varchar(10) DEFAULT NULL,
+  `expense_id` int(11) DEFAULT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `materials_request_date` date DEFAULT NULL,
+  `payment_status` varchar(100) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `priority` varchar(100) DEFAULT NULL,
+  `follow_up_date` date DEFAULT NULL,
+  `notes` text,
+  `supplier_inv_code` varchar(100) DEFAULT NULL,
+  `gst` decimal(10,2) DEFAULT NULL,
+  `gst_percentage` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`materials_request_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `materials_request_line_items` (
+  `materials_request_line_items_id` int(11) NOT NULL AUTO_INCREMENT,
+  `materials_request_id` int(11) DEFAULT NULL,
+  `item_title` varchar(255) DEFAULT NULL,
+  `quantity` decimal(10,2) DEFAULT NULL,
+  `unit` varchar(25) DEFAULT NULL,
+  `amount` float(10,2) DEFAULT NULL,
+  `description` text,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `modified_by` varchar(255) DEFAULT NULL,
+  `status` varchar(25) DEFAULT NULL,
+  `cost_price` decimal(10,2) DEFAULT NULL,
+  `selling_price` decimal(10,2) DEFAULT NULL,
+  `qty_requested` int(11) DEFAULT NULL,
+  `qty` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `gst` decimal(10,2) DEFAULT NULL,
+  `damage_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`materials_request_line_items_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `materials_request_line_items` ADD `brand` varchar(200) DEFAULT NULL;
+ALTER TABLE `materials_request` ADD `project_name` varchar(200) DEFAULT NULL;
+ALTER TABLE `materials_request` ADD `site_reference` varchar(200) DEFAULT NULL;
+ALTER TABLE `materials_request` ADD `request_by` varchar(200) DEFAULT NULL;
+ALTER TABLE `materials_request` ADD `request_date` date DEFAULT NULL;
+ALTER TABLE `materials_request` ADD `approved_by` varchar(200) DEFAULT NULL;
+ALTER TABLE `materials_request` ADD `approved_date` date DEFAULT NULL;
+
+// ======== MOIN - 07/01/2021 =============== //
+CREATE TABLE `quote_log` (
+  `quote_log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `quote_id` int(10) DEFAULT NULL,
+  `opportunity_id` int(10) DEFAULT NULL,
+  `project_id` int(10) DEFAULT NULL,
+  `quote_code` varchar(50) DEFAULT NULL,
+  `quote_date` date DEFAULT NULL,
+  `quote_status` varchar(50) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `currency_item` varchar(50) DEFAULT NULL,
+  `note` text,
+  `condition` text,
+  `quote_type` varchar(100) DEFAULT NULL,
+  `quote_sequence` tinyint(4) NOT NULL DEFAULT '1',
+  `template` tinyint(4) DEFAULT '0',
+  `template_title` varchar(255) DEFAULT NULL,
+  `created_by` varchar(50) DEFAULT NULL,
+  `sign_staff_id` int(11) DEFAULT NULL,
+  `flag` tinyint(4) DEFAULT '0',
+  `sort_order` int(11) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `signatory_name` varchar(25) DEFAULT NULL,
+  `signatory_position` varchar(25) DEFAULT NULL,
+  `quote_code_user` varchar(50) DEFAULT NULL,
+  `quote_intro_text_1` varchar(100) DEFAULT NULL,
+  `invoices_payment_terms` text,
+  `responsibility` text,
+  `provision_by_client` text,
+  `provision_by_krs` text,
+  `monday_to_friday_normal_timing` varchar(500) DEFAULT NULL,
+  `saturday_normal_timing` varchar(500) DEFAULT NULL,
+  `monday_to_friday_ot_timing` varchar(500) DEFAULT NULL,
+  `saturday_ot_timing` varchar(500) DEFAULT NULL,
+  `sunday_and_publicholiday_ot_timing` varchar(500) DEFAULT NULL,
+  `timesheet_type` varchar(50) DEFAULT NULL,
+  `site_address` varchar(255) DEFAULT NULL,
+  `project_location` varchar(255) DEFAULT NULL,
+  `project_reference` varchar(255) DEFAULT NULL,
+  `discount` decimal(10,2) DEFAULT NULL,
+  `gst` int(11) DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `drawing_nos` tinyint(4) DEFAULT NULL,
+  `intro_quote` text,
+  `our_reference` varchar(255) DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT NULL,
+  `revision` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`quote_log_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `quote_items_log` (
+  `quote_items_log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `quote_items_id` int(10) DEFAULT NULL,
+  `quote_log_id` int(10) DEFAULT NULL,
+  `quote_category_id` int(10) DEFAULT NULL,
+  `description` text,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `amount_other` decimal(10,0) DEFAULT NULL,
+  `item_type` varchar(200) DEFAULT NULL,
+  `sort_order` int(10) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `title` text,
+  `quote_id` int(11) DEFAULT NULL,
+  `opportunity_id` int(11) DEFAULT NULL,
+  `actual_amount` int(11) DEFAULT NULL,
+  `supplier_amount` int(11) DEFAULT NULL,
+  `quantity` decimal(10,2) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `unit` varchar(25) DEFAULT NULL,
+  `remarks` text,
+  `part_no` varchar(255) DEFAULT NULL,
+  `nationality` varchar(100) DEFAULT NULL,
+  `ot_rate` decimal(10,2) DEFAULT NULL,
+  `ph_rate` decimal(10,2) DEFAULT NULL,
+  `scaffold_code` varchar(100) DEFAULT NULL,
+  `erection` decimal(10,2) DEFAULT NULL,
+  `dismantle` decimal(10,2) DEFAULT NULL,
+  `unit_price` decimal(10,2) DEFAULT NULL,
+  `drawing_number` varchar(255) DEFAULT NULL,
+  `drawing_title` text,
+  `drawing_revision` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`quote_items_log_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+// ======== ANSARI - 07/01/2021 =============== //
+ALTER TABLE `materials_request_line_items` CHANGE `status` `status` VARCHAR(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL; 
+ALTER TABLE `po_product` ADD `brand` varchar(200) DEFAULT NULL;
+ALTER TABLE `po_product` CHANGE `status` `status` VARCHAR(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL; 
+ALTER TABLE `opportunity` ADD `office_ref_no` varchar(150) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `itq_ref_no` varchar(150) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `mode_of_submission` varchar(150) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `services` varchar(150) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `site_show_date` date DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `site_show_time` time DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `site_show_attendee` int(11) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `actual_closing` date DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `actual_submission_date` date DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `pricing_done_by_acmv` int(11) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `pricing_done_by_elec` int(11) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `status` varchar(150) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `me_consultants` varchar(150) DEFAULT NULL;
+ALTER TABLE `opportunity` ADD `email` varchar(150) DEFAULT NULL;
+
+// ======== ANSARI - 08/01/2021 =============== //
+ALTER TABLE `adjust_stock_log` ADD `materials_used` decimal(10,2) DEFAULT NULL;
+
+ALTER TABLE `attendance` ADD `latitude` VARCHAR(255) NULL, 
+ADD `longitude` VARCHAR(255) NULL;
+
+// ======== ANSARI - 11/01/2021 =============== //
+ALTER TABLE `user_group` ADD `user_group_type` varchar(50) DEFAULT NULL;
+ALTER TABLE `user_group` ADD `creation_date` datetime  DEFAULT NULL;
+ALTER TABLE `user_group` ADD `modification_date` datetime DEFAULT NULL;
+ALTER TABLE `mod_acc_room` ADD `room_type` varchar(100) DEFAULT NULL;
+UPDATE `mod_acc_room` SET room_type='module' WHERE room_type IS NULL;
+
+// ======== MOIN - 13/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `materials_returned` (
+  `materials_returned_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `project_materials_id` int(11) DEFAULT NULL,
+  `quantity` decimal(10,2) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`materials_returned_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ALTER TABLE `project_materials` ADD `viresco_factory` int(1) DEFAULT NULL;
+
+// ======== ANSARI - 15/01/2021 =============== //
+ALTER TABLE `costing_summary` ADD `salesman_commission_percentage` decimal(10,2) NULL;
+ALTER TABLE `costing_summary` ADD `finance_charges_percentage` decimal(10,2) NULL;
+ALTER TABLE `costing_summary` ADD `office_overheads_percentage` decimal(10,2) NULL;
+
+ // ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle` (
+  `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_no` varchar(200) DEFAULT NULL,
+  `year_of_purchase` varchar(200) DEFAULT NULL,
+  `model` varchar(200) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ // ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle_insurance` (
+  `vehicle_insurance_id` int(11) NOT NULL AUTO_INCREMENT,
+   `vehicle_id` int(11) DEFAULT NULL,
+  `insurance_date` date DEFAULT NULL,
+  `insurance_amount` decimal(10,2) DEFAULT NULL,
+  `renewal_date` date DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_insurance_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ // ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle_fuel` (
+  `vehicle_fuel_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `liters` varchar(200) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_fuel_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+// ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle_service` (
+  `vehicle_service_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ // ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle` (
+  `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_no` varchar(200) DEFAULT NULL,
+  `year_of_purchase` varchar(200) DEFAULT NULL,
+  `model` varchar(200) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ // ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle_insurance` (
+  `vehicle_insurance_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_id` int(11) DEFAULT NULL,
+  `insurance_date` date DEFAULT NULL,
+  `insurance_amount` decimal(10,2) DEFAULT NULL,
+  `renewal_date` date DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_insurance_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+ // ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle_fuel` (
+  `vehicle_fuel_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `liters` varchar(200) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_fuel_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+// ======== FATHIMA - 16/01/2021 =============== //
+CREATE TABLE IF NOT EXISTS `vehicle_service` (
+  `vehicle_service_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vehicle_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `created_by` varchar(200) DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`vehicle_service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+// ======== ANSARI - 16/01/2021 =============== //
+CREATE TABLE `opportunity_costing_summary` (
+  `opportunity_costing_summary_id` int(11) NOT NULL,
+  `po_code` varchar(100) DEFAULT NULL,
+  `invoice_code` varchar(100) DEFAULT NULL,
+  `delivery_date` date DEFAULT NULL,
+  `no_of_worker_used` varchar(100) DEFAULT NULL,
+  `no_of_days_worked` varchar(100) DEFAULT NULL,
+  `labour_rates_per_day` decimal(10,2) DEFAULT NULL,
+  `po_price` decimal(10,2) DEFAULT NULL,
+  `po_price_with_gst` decimal(10,2) DEFAULT NULL,
+  `invoiced_price` decimal(10,2) DEFAULT NULL,
+  `invoiced_price_with_gst` decimal(10,2) DEFAULT NULL,
+  `profit_percentage` decimal(10,2) DEFAULT NULL,
+  `profit` decimal(10,2) DEFAULT NULL,
+  `total_material_price` decimal(10,2) DEFAULT NULL,
+  `transport_charges` decimal(10,2) DEFAULT NULL,
+  `total_labour_charges` decimal(10,2) DEFAULT NULL,
+  `salesman_commission` decimal(10,2) DEFAULT NULL,
+  `finance_charges` decimal(10,2) DEFAULT NULL,
+  `office_overheads` decimal(10,2) DEFAULT NULL,
+  `other_charges` decimal(10,2) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `total_cost` decimal(10,2) DEFAULT NULL,
+  `opportunity_id` int(11) DEFAULT NULL,
+  `salesman_commission_percentage` decimal(10,2) DEFAULT NULL,
+  `finance_charges_percentage` decimal(10,2) DEFAULT NULL,
+  `office_overheads_percentage` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`opportunity_costing_summary_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `opportunity_costing_summary_history` (
+  `opportunity_costing_summary_history_id` int(11) NOT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `sub_con_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `opportunity_id` int(11) DEFAULT NULL,
+  `sketch` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `unit_price` decimal(10,2) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  `opportunity_costing_summary_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`opportunity_costing_summary_history_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `actual_opportunity_costing_summary` (
+  `actual_opportunity_costing_summary_id` int(11) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `description` text,
+  `opportunity_id` int(11) DEFAULT NULL,
+  `costing_summary_id` int(11) DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modified_by` varchar(100) DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`actual_opportunity_costing_summary_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `costing_summary` ADD `transport_charges_percentage` decimal(10,2) NULL;
+ALTER TABLE `opportunity_costing_summary` ADD `transport_charges_percentage` decimal(10,2) NULL;
+
+// ======== MOIN - 18/01/2021 =============== //
+ALTER TABLE `opportunity` ADD `price` DECIMAL(10,2) NULL; 
+ALTER TABLE `quote` ADD `employee_id` INT(11) NULL;
+
+// ======== ANSARI - 19/01/2021 =============== //
+ALTER TABLE `costing_summary_history` ADD `unit` VARCHAR(100) NULL;
+ALTER TABLE `opportunity_costing_summary_history` ADD `unit` VARCHAR(100) NULL;
+
+ALTER TABLE `employee` ADD `project_manager` TINYINT(4) DEFAULT NULL;
+
+// ======== SYED - 28/01/2021 =============== //
+ALTER TABLE `quote` ADD `ref_no_quote` VARCHAR(50) NULL;
+
+// ======== MOIN - 28/01/2021 =============== //
+ALTER TABLE `opportunity` ADD `employee_id` INT(11) NULL;
+
+ALTER TABLE `opportunity` ADD `actual_closing_time` TIME NULL AFTER `employee_id`;
+
+ALTER TABLE `quote_log` ADD `employee_id` INT(11) NULL,
+ADD `ref_no_quote` VARCHAR(50) NULL,
+ADD `intro_drawing_quote` TEXT NULL; 
+
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('nextMRCode', '1', 'Using this number work order code is generated', 'Number Field', NOW(), 1),
+('mRCodePrefix', 'VIR/MR/', 'Using this number receipt code is generated', 'Number Field', NOW(), 1);
+
+// ======== MOIN - 2/02/2022 =============== //
+CREATE TABLE IF NOT EXISTS `stock_history` (
+  `stock_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `po_product_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `purchase_order_id` int(11) DEFAULT NULL,
+  `qty` decimal(10,2) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`stock_history_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `purchase_order` ADD `delivery_to` VARCHAR(200) NULL;
+ALTER TABLE `purchase_order` ADD `contact` VARCHAR(100) NULL;
+ALTER TABLE `purchase_order` ADD `mobile` VARCHAR(100) NULL;
+ALTER TABLE `purchase_order` ADD `payment` FLOAT(10,2) NULL, 
+ADD `project` VARCHAR(100) NULL;
+
+// ======== ARIF - 28/04/2022 =============== //
+ALTER TABLE `employee_timesheet` ADD `sign_staff_id` INT(11) NULL AFTER `transport_charges`;
+ALTER TABLE `job_information` ADD `sun_ph_rate` decimal(10,1) DEFAULT NULL;
+ALTER TABLE `job_information` ADD `sun_ph_pay_rate` decimal(10,4) DEFAULT NULL;
+ALTER TABLE `job_information` ADD `salary_rate` varchar(100) DEFAULT NULL;
+ALTER TABLE `job_information` ADD `hourly_pay_rate` decimal(10,4) DEFAULT NULL;
+
+
+CREATE TABLE IF NOT EXISTS `project_warranty` (
+  `project_warranty_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+  `ref_no` varchar(255) DEFAULT NULL,
+`issued_for` varchar(255) DEFAULT NULL,
+`po_issue_date` date DEFAULT NULL,
+`warranty_date` date DEFAULT NULL,
+`detail_of_work` varchar(255) DEFAULT NULL,
+`location_of_work` varchar(255) DEFAULT NULL,
+`warranty_details` varchar(255) DEFAULT NULL,
+`work_completed_date` date DEFAULT NULL,
+`warranty_duration` varchar(255) DEFAULT NULL,
+`warranty_start_date` date DEFAULT NULL,
+`end_date` date DEFAULT NULL,
+`special_terms` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+`created_by` varchar(255) DEFAULT NULL,
+`modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`project_warranty_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+ALTER TABLE `project_warranty` ADD `created_by` VARCHAR(255) NULL DEFAULT NULL AFTER `modification_date`, ADD `modified_by` VARCHAR(255) NULL DEFAULT NULL AFTER `created_by`; 
+
+CREATE TABLE IF NOT EXISTS `renewal` (
+  `renewal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+`date` date DEFAULT NULL,
+`time` time DEFAULT NULL,
+`service_type` varchar(255) DEFAULT NULL,
+`completed_by` varchar(255) DEFAULT NULL,
+`store` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+`created_by` varchar(255) DEFAULT NULL,
+`modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`renewal_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('checklist', 'Check For Unusual Noise', NOW()),
+('checklist', 'Switch off isolate power', NOW()),
+('checklist', 'Inspect and clean condensate Drain tray and Connection', NOW()),
+('checklist', 'Clean air filter and check their condition,recommend replacement and needed', NOW()),
+('checklist', 'Inspect coil condition clean as necessary', NOW());
+
+CREATE TABLE IF NOT EXISTS `renewal_chechlist_history` (
+  `renewal_chechlist_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `renewal_id` int(11) DEFAULT NULL,
+`valuelist_id` int(11) DEFAULT NULL,
+`title` varchar(255) DEFAULT NULL,
+`monthly` int(11) DEFAULT NULL,
+`quaterly` int(11) DEFAULT NULL,
+`annually` int(11) DEFAULT NULL,
+`remarks` text DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+`created_by` varchar(255) DEFAULT NULL,
+`modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`renewal_chechlist_history_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+ALTER TABLE `renewal` ADD `opportunity_id` INT(11) NULL DEFAULT NULL AFTER `store`; 
+
+ALTER TABLE `renewal` ADD `quote_id` INT(11) NULL DEFAULT NULL AFTER `opportunity_id`; 
+
+ALTER TABLE `quote` ADD `renewal_id` INT(11) NULL DEFAULT NULL AFTER `project_id`; 
+ALTER TABLE project_warranty ADD renewal_id INT(11) NULL DEFAULT NULL AFTER warranty_date;
+
+
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('checklist', 'Check Thermostat Operation', NOW()),
+('checklist', 'Inspect & Clean where strainers were fitted', NOW()),
+('checklist', 'Check equipment', NOW()),
+('checklist', 'Check equipment voltage', NOW()),
+('checklist', 'Check Room temperature', NOW());
+
+
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('nextREVCode', '', 'Using this number work order code is generated', 'Number Field', NOW(), 1),
+('RevCodePrefix', 'REV -', 'Using this number receipt code is generated', 'Number Field', NOW(), 1);
+
+****************fathima(06-10-2023)*******************
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('popaymentType', '100% prior to delivery', NOW());
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('warrantyType', 'As per manufaturer standard', NOW());
+
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('deliveryType', 'Ex-stock Kuwait', NOW());
+
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('priceBasisType', 'DDP Kuwait', NOW());
+
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('documentType', 'Test Reports O&M Manuals', NOW());
+
+ALTER TABLE `purchase_order` ADD `payment_type` varchar(255) DEFAULT NULL;
+ALTER TABLE `purchase_order` ADD `warranty_type` varchar(255) DEFAULT NULL;
+ALTER TABLE `purchase_order` ADD `delivery_type` varchar(255) DEFAULT NULL;
+ALTER TABLE `purchase_order` ADD `price_basis` varchar(255) DEFAULT NULL;
+ALTER TABLE `purchase_order` ADD `document` varchar(255) DEFAULT NULL;
+
+
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('cp.specialTerms', '1. The Contractor’s warranty excludes remedy for damage or defect caused by
+modifications not executed by the Contractor, improper or insufficient maintenance, 
+improper operation, or normal wear and tear under normal usage.<br/>
+ 2. The Contractor’s warranty excludes equipment’s, materials, instruments and 
+or components issued by client. ', '', 'Text Area', NOW(), 1);
+
+
+CREATE TABLE IF NOT EXISTS `job_completion` (
+  `job_completion_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+`job_completion_date` date DEFAULT NULL,
+`job_no` varchar(255) DEFAULT NULL,
+`report_no` varchar(255) DEFAULT NULL,
+`company_id` int(11) DEFAULT NULL,
+`po_no` varchar(255) DEFAULT NULL,
+`job_title` varchar(255) DEFAULT NULL,
+`job_status` varchar(255) DEFAULT NULL,
+`description` text DEFAULT NULL,
+`approved_by` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+`created_by` varchar(255) DEFAULT NULL,
+`modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`job_completion_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `delivery_note` (
+  `delivery_note_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+`delivery_note_date` date DEFAULT NULL,
+`delivery_note_code` varchar(255) DEFAULT NULL,
+`ref_po` varchar(255) DEFAULT NULL,
+`received_by` varchar(255) DEFAULT NULL,
+`received_date` date DEFAULT NULL,
+`note` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+`created_by` varchar(255) DEFAULT NULL,
+`modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`delivery_note_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `delivery_note_items` (
+  `delivery_note_items_id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` int(11) DEFAULT NULL,
+   `delivery_note_id` int(11) DEFAULT NULL,
+`delivery_title` varchar(255) DEFAULT NULL,
+`description` varchar(255) DEFAULT NULL,
+`unit` varchar(255) DEFAULT NULL,
+`quantity` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modification_date` datetime DEFAULT NULL,
+`created_by` varchar(255) DEFAULT NULL,
+`modified_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`delivery_note_items_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+INSERT INTO valuelist (`key_text`, `value`, `creation_date`) VALUES
+('contractType', 'Ac and Electrical', NOW()),
+('contractType', 'AC Maintenance', NOW()),
+('contractType', 'AMC MEP', NOW()),
+('contractType', 'Drain Flushing', NOW()),
+('contractType', 'Electrical', NOW());
+
+ALTER TABLE `renewal` ADD `contract_type` VARCHAR(255) NULL DEFAULT NULL AFTER `ahu_fcu_no`; 
+
+ALTER TABLE `renewal` ADD `ref_no` VARCHAR(255) NULL AFTER `contract_type`, ADD `start_date` DATE NULL AFTER `ref_no`, ADD `end_date` DATE NULL AFTER `start_date`, ADD `behalf_party` VARCHAR(255) NULL AFTER `end_date`, ADD `article_five_content` VARCHAR(255) NULL AFTER `behalf_party`, ADD `contact_name` VARCHAR(255) NULL AFTER `article_five_content`, ADD `mobile` VARCHAR(255) NULL AFTER `contact_name`, ADD `shop_mention` VARCHAR(255) NULL AFTER `mobile`, ADD `willing_to_maintain` VARCHAR(255) NULL AFTER `shop_mention`;
+
+ALTER TABLE `renewal` CHANGE `article_five_content` `article_five_content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `shop_mention` `shop_mention` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `willing_to_maintain` `willing_to_maintain` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+
+ALTER TABLE `renewal` ADD `service` VARCHAR(255) NULL AFTER `willing_to_maintain`, ADD `price_visit` VARCHAR(255) NULL AFTER `service`, ADD `mall` VARCHAR(255) NULL AFTER `price_visit`, ADD `shop` VARCHAR(255) NULL AFTER `mall`, ADD `pay_machine` VARCHAR(255) NULL AFTER `shop`, ADD `valid_period` VARCHAR(255) NULL AFTER `pay_machine`; 
+
+ALTER TABLE `renewal` ADD `company_id` INT(11) NULL DEFAULT NULL AFTER `valid_period`;
+
+
+INSERT INTO setting (`key_text`, `value`, `description`, `value_type`, `creation_date`, `show_to_user`) VALUES
+('cp.bankDetailsinvoice', 'Beneficiary Name : A- TEAM INTERNATIONAL GENERAL CONTRACTING COMPANY FOR BUILDINGS <br/>Bank Name : Commercial Bank Of Kuwait<br/>Branch Address : Dajeej Branch<br/>Bank Account Number : 9600021017<br/>IBAN Number :  KW17COMB0000509600021100414014<br/>Swift Code : COMBKWKW', '', 'Text Area', NOW(), 1);
+
+ALTER TABLE renewal ADD apply_digital_signature VARCHAR(100) NULL DEFAULT NULL AFTER company_id, ADD signature_name VARCHAR(255) NULL DEFAULT NULL AFTER apply_digital_signature;
+
+ALTER TABLE quote ADD apply_digital_signature VARCHAR(100) NULL DEFAULT NULL AFTER renewal_id, ADD signature_name VARCHAR(255) NULL DEFAULT NULL AFTER apply_digital_signature;
+
+ALTER TABLE invoice ADD apply_digital_signature VARCHAR(100) NULL DEFAULT NULL AFTER invoice_id, ADD signature_name VARCHAR(255) NULL DEFAULT NULL AFTER apply_digital_signature;
+
+************fathima(8-01-2024)*************
+ALTER TABLE `project` ADD `client_po` TEXT NULL DEFAULT NULL AFTER `quote_id`, ADD `po_ref_no` TEXT NULL DEFAULT NULL AFTER `client_po`, ADD `po_amount` TEXT NULL DEFAULT NULL AFTER `po_ref_no`; 

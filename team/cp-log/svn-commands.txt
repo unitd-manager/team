@@ -1,0 +1,11 @@
+﻿USE THIS COMMAND TO TRANSFER LOCAL FILES FROM TO PAC HOSTING 2 :
+================================================================
+/utils/export-from-git.sh --repo team --dest /home/team/public_html/
+
+
+USE THIS COMMAND TO TRANSFER MASTER FILES FROM TO DEV/TEST :
+============================================================
+/utils/export-from-git.sh --repo cmsPilot --folder v3.0/CP/admin/modules/EnggCrm/ --dest /home/cmsPilot/
+/utils/export-from-git.sh --repo cmsPilot --folder v3.0/CP/admin/modules/Payroll/ --dest /home/cmsPilot/
+/utils/export-from-git.sh --repo cmsPilot --folder v3.0/CP/admin/widgets/EnggCrm/ --dest /home/cmsPilot/
+/utils/export-from-git.sh --repo cmsPilot --folder v3.0/CP/admin/themes/MaterialTim/ --dest /home/cmsPilot/
