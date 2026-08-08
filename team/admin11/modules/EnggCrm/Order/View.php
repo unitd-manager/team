@@ -4331,6 +4331,70 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
      /**
      *
      */
+
+     function getUpdateAddReceiptCode()
+{
+    $db = Zend_Registry::get('db');
+    $fn = Zend_Registry::get('fn');
+
+    $site_id = $fn->getSessionParam('cp_site_id');
+
+    // Main Receipt Prefix
+    $SQL = "
+        SELECT value
+        FROM setting
+        WHERE key_text = 'receiptCodePrefix'
+        LIMIT 1
+    ";
+
+    $result = $db->sql_query($SQL);
+    $row = $db->sql_fetchrow($result);
+
+    $receiptPrefix = !empty($row['value']) ? $row['value'] : 'REC/';
+
+    // Country Prefix
+    if ($site_id == 1) {
+        // Kuwait
+        $countryPrefix = 'KWT-';
+    } else if ($site_id == 2) {
+        // Saudi Arabia
+        $countryPrefix = 'KSA-';
+    } else {
+        // Default
+        $countryPrefix = '';
+    }
+
+    // Get common next receipt number
+    $SQL = "
+        SELECT value
+        FROM setting
+        WHERE key_text = 'nextReceiptCode'
+        LIMIT 1
+    ";
+
+    $result = $db->sql_query($SQL);
+    $row = $db->sql_fetchrow($result);
+
+    $nextReceiptCode = !empty($row['value']) ? $row['value'] : 1;
+
+    // Generate receipt code
+    $receiptCode = $receiptPrefix
+                 . $countryPrefix
+                 . $nextReceiptCode
+                 . '-'
+                 . date('Y');
+
+    // Increment receipt counter
+    $SQL = "
+        UPDATE setting
+        SET value = value + 1
+        WHERE key_text = 'nextReceiptCode'
+    ";
+
+    $db->sql_query($SQL);
+
+    return $receiptCode;
+}
     function getPrintCreditNote() {
         $db = Zend_Registry::get('db');
         $cpCfg = Zend_Registry::get('cpCfg');

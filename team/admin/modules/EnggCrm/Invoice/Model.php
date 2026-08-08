@@ -124,6 +124,7 @@ class CPL_Admin_Modules_EnggCrm_Invoice_Model extends CP_Admin_Modules_EnggCrm_I
         $tv = Zend_Registry::get('tv');
         $fn = Zend_Registry::get('fn');
         $searchVar = Zend_Registry::get('searchVar');
+        $searchVar->mainTableAlias = 'i';
 
         $invoice_id    = $fn->getReqParam('invoice_id');
         $record_id     = $fn->getReqParam('record_id');
@@ -2095,6 +2096,7 @@ $discount = number_format((float)$fn->getPostParam('discount'), 2, '.', '');
      */
     function getGenerateCreditNoteFormSubmit() {
         $fn = Zend_Registry::get('fn');
+        $site_id = $fn->getSessionParam('cp_site_id');
         $db = Zend_Registry::get('db');
         $dbUtil = Zend_Registry::get('dbUtil');
         $validate = Zend_Registry::get('validate');
@@ -2114,25 +2116,27 @@ $discount = number_format((float)$fn->getPostParam('discount'), 2, '.', '');
         $count = count($amount_arr);
         if ($count > 0) {
             /* Adding zeros for invoice to make it 4 digit */
-            $length_of_inv_code = strlen($fn->getSettingsValueByKey('nextCreditNoteCode'));
-            if ($length_of_inv_code == 1) {
-                $inv_code = '000' . $fn->getSettingsValueByKey('nextCreditNoteCode');
-            } else if ($length_of_inv_code == 2) {
-                $inv_code = '00' . $fn->getSettingsValueByKey('nextCreditNoteCode');
-            } else if ($length_of_inv_code == 3) {
-                $inv_code = '0' . $fn->getSettingsValueByKey('nextCreditNoteCode');
-            } else {
-                $inv_code = $fn->getSettingsValueByKey('nextCreditNoteCode');
-            }
+            // $length_of_inv_code = strlen($fn->getSettingsValueByKey('nextCreditNoteCode'));
+            // if ($length_of_inv_code == 1) {
+            //     $inv_code = '000' . $fn->getSettingsValueByKey('nextCreditNoteCode');
+            // } else if ($length_of_inv_code == 2) {
+            //     $inv_code = '00' . $fn->getSettingsValueByKey('nextCreditNoteCode');
+            // } else if ($length_of_inv_code == 3) {
+            //     $inv_code = '0' . $fn->getSettingsValueByKey('nextCreditNoteCode');
+            // } else {
+            //     $inv_code = $fn->getSettingsValueByKey('nextCreditNoteCode');
+            // }
+            $creditNoteCode = $this->getGenerateCreditNoteCode();
 
             /* Generation of Invoice record */
             $orderRec   = $fn->getRecordRowByID('order', 'order_id', $order_id);
 
             $faCn = array();
-            $faCn['credit_note_code'] = $fn->getSettingsValueByKey('creditNotePrefix') . $inv_code;
+            $faCn['credit_note_code'] = $creditNoteCode;
             $faCn['date']             = $date;
             $faCn['remarks']          = $remarks;        
             $faCn['order_id']         = $order_id;
+            $faCn['site_id']            = $site_id;
             $faCn['creation_date']    = date('Y-m-d H:i:s');
             $faCn['created_by']       = $fn->getSessionParam('userName');
             
@@ -2145,8 +2149,8 @@ $discount = number_format((float)$fn->getPostParam('discount'), 2, '.', '');
             $resultCn  = $db->sql_query($insertCn);
             $credit_note_id = $db->sql_nextid();
 
-            $SQL = "UPDATE setting SET value = (value+1) WHERE key_text = 'nextCreditNoteCode'";
-            $result = $db->sql_query($SQL);
+            // $SQL = "UPDATE setting SET value = (value+1) WHERE key_text = 'nextCreditNoteCode'";
+            // $result = $db->sql_query($SQL);
 
             $total_amount = 0;
             for ($i= 0; $i < $count; $i++) {
@@ -2193,77 +2197,168 @@ $discount = number_format((float)$fn->getPostParam('discount'), 2, '.', '');
      */
    function getUpdateAddInvoiceCode()
 {
-echo "Site ID: " . $site_id . "<br>";
+$db = Zend_Registry::get('db');
+$fn = Zend_Registry::get('fn');
 
-echo "invoiceCodePrefix = " . $fn->getSettingsValueByKey('invoiceCodePrefix') . "<br>";
+$site_id = $fn->getSessionParam('cp_site_id');
 
-echo "invoiceCodePrefixKWT = " . $fn->getSettingsValueByKey('invoiceCodePrefixKWT') . "<br>";
+// Main Invoice Prefix
+$SQL = "
+    SELECT value
+    FROM setting
+    WHERE key_text = 'invoiceCodePrefix'
+    LIMIT 1
+";
+$result = $db->sql_query($SQL);
+$row = $db->sql_fetchrow($result);
 
-echo "invoiceCodePrefixKSA = " . $fn->getSettingsValueByKey('invoiceCodePrefixKSA') . "<br>";
+$invoicePrefix = !empty($row['value']) ? $row['value'] : 'INV/';
 
-echo "countryPrefix = " . $countryPrefix . "<br>";
+// Country Prefix
+switch ($site_id) {
+    case 1:
+        $prefixKey = 'invoiceCodePrefixKWT';
+        break;
 
-exit;
+    case 2:
+        $prefixKey = 'invoiceCodePrefixKSA';
+        break;
+
+    default:
+        $prefixKey = 'invoiceCodePrefixDefault';
+        break;
+}
+
+// Get Country Prefix
+$SQL = "
+    SELECT value
+    FROM setting
+    WHERE key_text = '{$prefixKey}'
+    LIMIT 1
+";
+$result = $db->sql_query($SQL);
+$row = $db->sql_fetchrow($result);
+
+$countryPrefix = !empty($row['value']) ? $row['value'] : '';
+
+// Get Common Next Invoice Number
+$SQL = "
+    SELECT value
+    FROM setting
+    WHERE key_text = 'nextInvoiceCode'
+    LIMIT 1
+";
+$result = $db->sql_query($SQL);
+$row = $db->sql_fetchrow($result);
+
+$nextInvoiceCode = !empty($row['value']) ? $row['value'] : 1;
+
+// Generate Invoice Code
+$invoiceCode = $invoicePrefix . $countryPrefix . $nextInvoiceCode . '-' . date('Y');
+
+// Increment Common Counter
+$SQL = "
+    UPDATE setting
+    SET value = value + 1
+    WHERE key_text = 'nextInvoiceCode'
+";
+$db->sql_query($SQL);
+
+return $invoiceCode;
+}
+
+function getGenerateCreditNoteCode()
+{
     $db = Zend_Registry::get('db');
     $fn = Zend_Registry::get('fn');
 
-    // Current Site ID
-    $site_id = isset($_SESSION['cp_site_id']) ? (int)$_SESSION['cp_site_id'] : 0;
+    $site_id = $fn->getSessionParam('cp_site_id');
 
-    // Main Invoice Prefix (INV/)
-    $invoicePrefix = $fn->getSettingsValueByKey('invoiceCodePrefix');
+    // Main Credit Note Prefix
+    $SQL = "
+        SELECT value
+        FROM setting
+        WHERE key_text = 'creditNotePrefix'
+        LIMIT 1
+    ";
 
-    // Country Prefix Key
+    $result = $db->sql_query($SQL);
+    $row = $db->sql_fetchrow($result);
+
+    $creditNotePrefix = !empty($row['value'])
+        ? $row['value']
+        : 'CN';
+
+    // Country Prefix
     switch ($site_id) {
+
         case 1:
-            $prefixKey = 'invoiceCodePrefixKWT';
+            $prefixKey = 'creditNotePrefixKWT';
             break;
 
         case 2:
-            $prefixKey = 'invoiceCodePrefixKSA';
+            $prefixKey = 'creditNotePrefixKSA';
             break;
 
         default:
-            $prefixKey = 'invoiceCodePrefixDefault';
+            $prefixKey = 'creditNotePrefixDefault';
             break;
     }
 
-    // Get Country Prefix directly from setting table
+    // Get Country Prefix
     $SQL = "
         SELECT value
         FROM setting
         WHERE key_text = '{$prefixKey}'
         LIMIT 1
     ";
+
     $result = $db->sql_query($SQL);
     $row = $db->sql_fetchrow($result);
 
-    $countryPrefix = !empty($row['value']) ? $row['value'] : '';
+    $countryPrefix = !empty($row['value'])
+        ? $row['value']
+        : '';
 
-    // Get Next Invoice Number
+    // Get Next Credit Note Number
     $SQL = "
         SELECT value
         FROM setting
-        WHERE key_text = 'nextInvoiceCode'
+        WHERE key_text = 'nextCreditNoteCode'
         LIMIT 1
     ";
+
     $result = $db->sql_query($SQL);
     $row = $db->sql_fetchrow($result);
 
-    $nextInvoiceCode = !empty($row['value']) ? $row['value'] : 1;
+    $nextCreditNoteCode = !empty($row['value'])
+        ? $row['value']
+        : 1;
 
-    // Generate Invoice Code
-    $invoiceCode = $invoicePrefix . $countryPrefix . $nextInvoiceCode . '-' . date('Y');
+    // Format Number
+    $formattedNumber = str_pad(
+        $nextCreditNoteCode,
+        4,
+        '0',
+        STR_PAD_LEFT
+    );
 
-    // Increment Invoice Number
+    // Generate Credit Note Code
+    $creditNoteCode =
+        $creditNotePrefix .
+        $countryPrefix .
+        $formattedNumber;
+
+    // Increment Counter
     $SQL = "
         UPDATE setting
         SET value = value + 1
-        WHERE key_text = 'nextInvoiceCode'
+        WHERE key_text = 'nextCreditNoteCode'
     ";
+
     $db->sql_query($SQL);
 
-    return $invoiceCode;
+    return $creditNoteCode;
 }
 /**
      *

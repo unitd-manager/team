@@ -147,8 +147,133 @@ class CPL_Admin_Lib_Functions extends CP_Admin_Lib_Functions
     /**
      * 
      */
-     
     function getConvertNumber($number) {
+
+    $fn = Zend_Registry::get('fn');
+    $site_id = $fn->getSessionParam('cp_site_id');
+
+    // Currency settings based on site
+    if ($site_id == 1) {
+        // Kuwait
+        $fractionName = 'Fills';
+        $decimalPlaces = 3;
+    } else if ($site_id == 2) {
+        // Saudi Arabia
+        $fractionName = 'Halalas';
+        $decimalPlaces = 2;
+    } else {
+        // Default
+        $fractionName = 'Fills';
+        $decimalPlaces = 3;
+    }
+
+    /*
+     * Round according to the country's currency
+     *
+     * Kuwait: 131.7894 -> 131.789
+     * Saudi : 131.789  -> 131.79
+     */
+    $number = number_format(
+        (float)$number,
+        $decimalPlaces,
+        '.',
+        ''
+    );
+
+    list($integer, $fraction) = explode(".", (string)$number);
+
+    $output = "";
+
+    // Handle negative / positive numbers
+    if ($integer{0} == "-") {
+
+        $output = "negative ";
+        $integer = ltrim($integer, "-");
+
+    } else if ($integer{0} == "+") {
+
+        $output = "positive ";
+        $integer = ltrim($integer, "+");
+    }
+
+    // Convert integer part
+    if ($integer{0} == "0") {
+
+        $output .= "zero";
+
+    } else {
+
+        $integer = str_pad($integer, 36, "0", STR_PAD_LEFT);
+
+        $group = rtrim(chunk_split($integer, 3, " "), " ");
+        $groups = explode(" ", $group);
+
+        $groups2 = array();
+
+        foreach ($groups as $g) {
+
+            $groups2[] = $this->getConvertThreeDigit(
+                $g{0},
+                $g{1},
+                $g{2}
+            );
+        }
+
+        for ($z = 0; $z < count($groups2); $z++) {
+
+            if ($groups2[$z] != "") {
+
+                $output .= $groups2[$z]
+                    . $this->getConvertGroup(11 - $z)
+                    . (
+                        $z < 11
+                        && !array_search('', array_slice($groups2, $z + 1, -1))
+                        && $groups2[11] != ''
+                        && $groups[11]{0} == '0'
+                            ? " and "
+                            : " "
+                    );
+            }
+        }
+
+        $output = rtrim($output, ", ");
+    }
+
+    // Convert fraction
+    if ((int)$fraction > 0) {
+
+        if ($decimalPlaces == 3) {
+
+            // Kuwait: 789 -> Seven Hundred Eighty Nine
+            $output .= " " . $this->getConvertThreeDigit(
+                $fraction{0},
+                $fraction{1},
+                $fraction{2}
+            );
+
+        } else {
+
+            // Saudi: 79 -> Seventy Nine
+            $output .= " " . $this->getConvertThreeDigit(
+                "0",
+                $fraction{0},
+                $fraction{1}
+            );
+        }
+
+        $output .= " " . $fractionName . " Only";
+
+    } else {
+
+        $output .= " Only";
+    }
+
+    return $output;
+}
+ /**
+     * 
+     */
+    function getConvertNumberOLd1($number) {
         
         /* Check whether number has decimal value or not. If no, add decimal point and zeros */
         if (strpos($number,".") == false){

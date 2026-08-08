@@ -24,16 +24,7 @@ class CPL_Admin_Modules_EnggCrm_Receipt_Model extends CP_Admin_Modules_EnggCrm_R
         $bank_name       = $fn->getPostParam('bank_name');
         $remarks         = $fn->getPostParam('remarks');
 
-        $receiptCode = $fn->getSettingsValueByKey("nextReceiptCode");
-        if ($receiptCode < 10) {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . '000' . $receiptCode;
-        } else if($receiptCode < 99) {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . '00' . $receiptCode;
-        } else if($receiptCode < 999) {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . '0' . $receiptCode;
-        } else {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . $receiptCode;
-        }
+        $receipt_code = $this->getGenerateReceiptCode();
         
         $current_date = date("Y-m-d H:i:s");
 
@@ -56,8 +47,8 @@ class CPL_Admin_Modules_EnggCrm_Receipt_Model extends CP_Admin_Modules_EnggCrm_R
         $receipt_id         = $db->sql_nextid();
         $receipt_amount     = $amount;
 
-        $SQLUpdate       = "UPDATE setting SET value = (value+1) WHERE key_text = 'nextReceiptCode'";
-        $resultUpdate    = $db->sql_query($SQLUpdate);
+        // $SQLUpdate       = "UPDATE setting SET value = (value+1) WHERE key_text = 'nextReceiptCode'";
+        // $resultUpdate    = $db->sql_query($SQLUpdate);
         $nextReceiptCode = $fn->getSettingsValueByKey("nextReceiptCode");
         
         foreach($invoiceCodes AS $invoice_code){
@@ -235,16 +226,7 @@ class CPL_Admin_Modules_EnggCrm_Receipt_Model extends CP_Admin_Modules_EnggCrm_R
         $bank_name       = $fn->getPostParam('bank_name');
         $remarks         = $fn->getPostParam('remarks');
 
-        $receiptCode = $fn->getSettingsValueByKey("nextReceiptCode");
-        if ($receiptCode < 10) {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . '000' . $receiptCode;
-        } else if($receiptCode < 99) {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . '00' . $receiptCode;
-        } else if($receiptCode < 999) {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . '0' . $receiptCode;
-        } else {
-            $receipt_code = $fn->getSettingsValueByKey('receiptCodePrefix') . $receiptCode;
-        }
+        $receipt_code = $this->getGenerateReceiptCode();
         
         $current_date = date("Y-m-d H:i:s");
 
@@ -571,6 +553,87 @@ class CPL_Admin_Modules_EnggCrm_Receipt_Model extends CP_Admin_Modules_EnggCrm_R
     }
 
     /**
+     *
+     */
+
+    function getGenerateReceiptCode()
+{
+    $db = Zend_Registry::get('db');
+    $fn = Zend_Registry::get('fn');
+
+    $site_id = $fn->getSessionParam('cp_site_id');
+
+    // Main Receipt Prefix
+    $SQL = "
+        SELECT value
+        FROM setting
+        WHERE key_text = 'receiptCodePrefix'
+        LIMIT 1
+    ";
+    $result = $db->sql_query($SQL);
+    $row = $db->sql_fetchrow($result);
+
+    $receiptPrefix = !empty($row['value']) ? $row['value'] : 'REC-';
+
+    // Country Prefix
+    switch ($site_id) {
+
+        case 1:
+            // Kuwait
+            $prefixKey = 'receiptCodePrefixKWT';
+            break;
+
+        case 2:
+            // Saudi Arabia
+            $prefixKey = 'receiptCodePrefixKSA';
+            break;
+
+        default:
+            $prefixKey = 'receiptCodePrefixDefault';
+            break;
+    }
+
+    // Get Country Prefix
+    $SQL = "
+        SELECT value
+        FROM setting
+        WHERE key_text = '{$prefixKey}'
+        LIMIT 1
+    ";
+    $result = $db->sql_query($SQL);
+    $row = $db->sql_fetchrow($result);
+
+    $countryPrefix = !empty($row['value']) ? $row['value'] : '';
+
+    // Get Common Next Receipt Number
+    $SQL = "
+        SELECT value
+        FROM setting
+        WHERE key_text = 'nextReceiptCode'
+        LIMIT 1
+    ";
+    $result = $db->sql_query($SQL);
+    $row = $db->sql_fetchrow($result);
+
+    $nextReceiptCode = !empty($row['value']) ? $row['value'] : 1;
+
+    // Format number
+    $formattedNumber = str_pad($nextReceiptCode, 4, '0', STR_PAD_LEFT);
+
+    // Generate Receipt Code
+    $receiptCode = $receiptPrefix . $countryPrefix . $formattedNumber;
+
+    // Increment Common Counter
+    $SQL = "
+        UPDATE setting
+        SET value = value + 1
+        WHERE key_text = 'nextReceiptCode'
+    ";
+    $db->sql_query($SQL);
+
+    return $receiptCode;
+}
+ /**
      *
      */
     function getPopulateReceiptAmount() {

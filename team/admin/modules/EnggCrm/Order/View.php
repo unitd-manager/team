@@ -508,6 +508,23 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
         $invoice_id       = $fn->getReqParam('invoice_id');
         $totalvalue       = 0;
 
+        // Currency based on site
+$site_id = $fn->getSessionParam('cp_site_id');
+
+switch ($site_id) {
+    case 1:
+        $currency = 'KWD';
+        break;
+
+    case 2:
+        $currency = 'SAR';
+        break;
+
+    default:
+        $currency = 'KWD';
+        break;
+}
+
         $SQL = "
         SELECT ini.*
                 ,c.company_name
@@ -660,8 +677,8 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
                             <th width="55%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">JOB DESCRIPTION</th>
                             <th width="7%"  align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">QTY</th>
                             <th width="7%"  align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">UOM</th>
-                            <th width="12%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">UNIT PRICE(KWD)</th>
-                            <th width="13%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">TOTAL PRICE(KWD)</th>
+                            <th width="12%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">UNIT PRICE('.$currency.')</th>
+                            <th width="13%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">TOTAL PRICE('.$currency.')</th>
                         </tr>
                     </thead>';
         $subtotalValue   = 0;
@@ -759,7 +776,7 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
 
         if($company['gst_percentage'] > 0) {
             $tbl3 = $tbl3.''.$discountRow.'<tr>
-                              <td colspan="2" style="font-size:10px; border:1px solid #000;border-right:1px solid #000;">Invoice Amount In KWD : '.$amount_in_words.'</td>
+                              <td colspan="2" style="font-size:10px; border:1px solid #000;border-right:1px solid #000;">Invoice Amount In '.$currency.' : '.$amount_in_words.'</td>
                             
                               <td align="right" colspan="4" style="font-size:10px; font-weight:bold; border:1px solid #000;">'.number_format($totalvalue, 3).'</td>
                           </tr>
@@ -1558,6 +1575,20 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
     function getPrintReceipt() {
         $cpCfg = Zend_Registry::get('cpCfg');
         $fn = Zend_Registry::get('fn');
+        $site_id = $fn->getSessionParam('cp_site_id');
+        if ($site_id == 1) {
+    // Kuwait
+    $currency = 'KWD';
+    $decimalPlaces = 3;
+} elseif ($site_id == 2) {
+    // Saudi Arabia
+    $currency = 'SAR';
+    $decimalPlaces = 2;
+} else {
+    // Default
+    $currency = 'KWD';
+    $decimalPlaces = 3;
+}
         $tv = Zend_Registry::get('tv');
         $fn = Zend_Registry::get('fn');
         $db = Zend_Registry::get('db');
@@ -1766,7 +1797,7 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
                 <td width="50%" align="right" style="font-size:12px; font-weight:bold;">'.$rowRec['company_name'].'</td>
             </tr>
             <tr>
-                <td width="50%" style="font-size:12px;">The Sum of K.D</td>
+                <td width="50%" style="font-size:12px;">The Sum of '.$currency.'</td>
                 <td width="50%" align="right" style="font-size:12px; font-weight:bold;">'.$amount_in_words.'</td>
             </tr>
             <tr>
@@ -1786,8 +1817,8 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
                 <td width="50%" align="right" style="font-size:12px; font-weight:bold;">'.$rowRec['bank_name'].'</td>
             </tr>
             <tr>
-            <td width="50%" style="font-size:12px;">KWD</td>
-            <td width="50%" align="right" style="font-size:12px; font-weight:bold;">'.number_format($rowRec['receipt_amount'], 3).'</td>
+            <td width="50%" style="font-size:12px;">'.$currency.'</td>
+            <td width="50%" align="right" style="font-size:12px; font-weight:bold;">'.number_format($rowRec['receipt_amount'], $decimalPlaces).'</td>
         </tr>
         </table>
         ';
@@ -4392,6 +4423,15 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
 
         $credit_note_id   = $fn->getReqParam('credit_note_id');
         $order_id       = $fn->getReqParam('order_id');
+        $site_id = $fn->getSessionParam('cp_site_id');
+
+if ($site_id == 1) {
+    $currency = 'KWD';
+} else if ($site_id == 2) {
+    $currency = 'SAR';
+} else {
+    $currency = 'KWD';
+}
         $totalvalue       = 0;
 
         $SQL = "
@@ -4504,8 +4544,8 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
                             <th width="6%"  align="center" style="font-size:10px; font-weight:bold;border:1px solid #000;">S. NO.</th>
                             <th width="55%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">JOB DESCRIPTION</th>
                             <th width="7%"  align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">QTY</th>
-                            <th width="12%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">UNIT PRICE(KWD)</th>
-                            <th width="13%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">TOTAL PRICE(KWD)</th>
+                            <th width="12%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">UNIT PRICE('.$currency.')</th>
+                            <th width="13%" align="center" style="border:1px solid #000;font-size:10px; font-weight:bold;">TOTAL PRICE('.$currency.')</th>
                         </tr>
                     </thead>';
         $subtotalValue   = 0;
@@ -4556,7 +4596,7 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
         $amount_in_words   = $fn->getConvertNumber($totalvalue);
        
         $tbl3 = $tbl3.'<tr>
-                          <td colspan="2" style="font-size:10px; border:1px solid #000;border-right:1px solid #000;">Invoice Amount In KWD : '.$amount_in_words.'</td>
+                          <td colspan="2" style="font-size:10px; border:1px solid #000;border-right:1px solid #000;">Invoice Amount In '.$currency.' : '.$amount_in_words.'</td>
                         
                           <td align="right" colspan="3" style="font-size:10px; font-weight:bold; border:1px solid #000;">'.number_format($totalvalue, 3).'</td>
                       </tr>
@@ -4588,7 +4628,7 @@ class CPL_Admin_Modules_EnggCrm_Order_View extends CP_Admin_Modules_EnggCrm_Orde
         $pdf->ln(5);
         $pdf->writeHTML($tbl5, true, false, false, false, '');
 
-        $download_title = $company['credit_note_code'] .'-A Team'. '-Invoice.pdf';
+        $download_title = $company['credit_note_code'] .'-A Team-Credit Note.pdf';
         $pdf->Output($download_title, 'I');
     }
 }
