@@ -15,7 +15,7 @@ if (CP_HOST == "team.smartprosoft.com" || CP_HOST == "www.team.smartprosoft.com"
     $rootFolder = substr($docRoot, 0, stripos($docRoot, '/team/'));
 
     define('CP_ENV', 'local');
-    define('CP_CORE_PATH', 'C:/23rdJune/team/team/cmspilotv30/');
+    define('CP_CORE_PATH', 'D:/USS Projects/team/team/cmspilotv30/');
 }
 
 define('CP_PATH', CP_CORE_PATH . 'CP/');

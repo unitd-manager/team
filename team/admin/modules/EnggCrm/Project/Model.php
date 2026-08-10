@@ -813,6 +813,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
         $dbUtil = Zend_Registry::get('dbUtil');
         $cpCfg = Zend_Registry::get('cpCfg');
         $media = Zend_Registry::get('media');
+        $site_id = $fn->getSessionParam('cp_site_id');
 
                 $opportunity_id = $fn->getReqParam('opportunity_id');
 
@@ -838,11 +839,14 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
 
         if ($numRows > 0) {
             $row = $db->sql_fetchrow($result);
+            if (!$site_id && isset($row['site_id'])) {
+                $site_id = $row['site_id'];
+            }
         if ($row['category'] == 'Contract') {
-            $SQLRenewal = "UPDATE renewal SET quote_id = '{$rowForQuote['quote_id']}' WHERE opportunity_id = {$opportunity_id}";
+            $SQLRenewal = "UPDATE renewal SET quote_id = '{$rowForQuote['quote_id']}', site_id = '{$site_id}' WHERE opportunity_id = {$opportunity_id}";
         $resultRenewal = $db->sql_query($SQLRenewal);
 
-        $SQL3 = "UPDATE quote SET quote_status = 'New' WHERE opportunity_id = '{$opportunity_id}' AND project_id = '{$id}'";
+        $SQL3 = "UPDATE quote SET quote_status = 'New', site_id = '{$site_id}' WHERE opportunity_id = '{$opportunity_id}' AND project_id = '{$id}'";
         $result3 = $db->sql_query($SQL3);
 
         $SQLOpportunity    = "UPDATE opportunity SET status = 'Converted to Project' WHERE opportunity_id = {$opportunity_id}";
@@ -892,13 +896,14 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
             $fa['opportunity_id']     = $row['opportunity_id'];
             $fa['per_completed']      = 0;
             $fa['start_date']         = date("Y-m-d");
+            $fa['site_id']            = $site_id;
         }
 
         $fa['project_code'] = $this->getProjectCodeOnConvFromOpp($row['opportunity_id']);
         $id = $fn->addRecord($this->fieldsArray);
               
         //---------------------------------------//
-        $SQL1    = "UPDATE quote SET project_id = {$id} WHERE opportunity_id = {$opportunity_id}";
+        $SQL1    = "UPDATE quote SET project_id = {$id}, site_id = '{$site_id}' WHERE opportunity_id = {$opportunity_id}";
         $result1 = $db->sql_query($SQL1);
 
         $faOpp = array();
@@ -918,6 +923,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
             $faPe['project_id']         = $id;
             $faPe['employee_id']        = $rowOE['employee_id'];
             $faPe['active_in_project']  = $rowOE['active_in_project'];
+            $faPe['site_id']            = $site_id;
             $faPe['creation_date']      = date('Y-m-d H:i:s');
 
             $SQLPE = $dbUtil->getInsertSQLStringFromArray($faPe, 'project_employee');
@@ -963,6 +969,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
             $facs['finance_charges_percentage']     = $rowOCS['finance_charges_percentage'];
             $facs['office_overheads_percentage']    = $rowOCS['office_overheads_percentage'];
             $facs['transport_charges_percentage']   = $rowOCS['transport_charges_percentage'];
+            $facs['site_id']                        = $site_id;
             $facs['creation_date']                  = date('Y-m-d H:i:s');
             $facs['created_by']                     = $fn->getSessionParam('userName');
             
@@ -982,6 +989,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
                 $faIi['project_id']         = $id;
                 $faIi['costing_summary_id'] = $costing_summary_id;
                 $faIi['supplier_id']        = $rowOCSH['supplier_id'];
+                $faIi['site_id']            = $site_id;
                 $faIi['sub_con_id']         = $rowOCSH['sub_con_id'];
                 $faIi['quantity']           = $rowOCSH['quantity'];
                 $faIi['unit_price']         = $rowOCSH['unit_price'];
@@ -1005,6 +1013,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
         while ($rowMedia = $db->sql_fetchrow($resultMedia)) {
             $faM = array();
             $faM['record_id']         = $id;
+            $faM['site_id']           = $site_id;
             $faM['media_type']        = $rowMedia['media_type'];
             $faM['actual_file_name']  = $rowMedia['actual_file_name'];
             $faM['content_type']      = $rowMedia['content_type'];
@@ -1065,6 +1074,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
         $faOrder['quote_id']             = $rowForQuote['quote_id'];
         $faOrder['project_id']           = $id;
         $faOrder['company_id']           = $projRec['company_id'];
+        $faOrder['site_id']              = $site_id;
         $faOrder['contact_id']           = $projRec['contact_id'];
         $faOrder['project_type']         = $projRec['category'];
         $faOrder['quote_title']          = $quoteRec['title'];
@@ -1141,6 +1151,7 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
             $faOi['record_id']        = $row['quote_items_id'];
             $faOi['order_id']         = $order_id;
             $faOi['quote_id']         = $rowForQuote['quote_id'];
+            $faOi['site_id']          = $site_id;
             $faOi['drawing_number']   = $row['drawing_number'];
             $faOi['drawing_title']    = $row['drawing_title'];
             $faOi['drawing_revision'] = $row['drawing_revision'];

@@ -1821,7 +1821,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuote_View extends CP_Common_Lib_WidgetVi
                 $pdf->writeHTML($tbl4, true, false, false, false, '');
         $pdf->writeHTML($tbl6, true, false, false, false, '');
 
-        $download_title = $company['quote_cod4'] . '-' . $company['project_title'] .'-A Team' . '-Quote.pdf';
+        $download_title = $company['quote_code'] . '-' . $company['project_title'] .'-A Team' . '-Quote.pdf';
         $pdf->Output($download_title, 'I');
     }
 
