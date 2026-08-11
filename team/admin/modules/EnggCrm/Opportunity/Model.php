@@ -204,7 +204,7 @@ class CPL_Admin_Modules_EnggCrm_Opportunity_Model extends CP_Admin_Modules_EnggC
             */
         }
 
-        $searchVar->sortOrder = "o.opportunity_code DESC, o.enquiry_date DESC, o.status, c.company_name, VL.sort_order DESC";
+        $searchVar->sortOrder = "o.opportunity_id DESC, o.opportunity_code DESC, o.enquiry_date DESC, o.status, c.company_name, VL.sort_order DESC";
 
         //print $searchVar->sortOrder . "<br>";
     }
@@ -1230,10 +1230,8 @@ class CPL_Admin_Modules_EnggCrm_Opportunity_Model extends CP_Admin_Modules_EnggC
             $nextKey = 'nextOpportunityCode_SA';
             break;
 
-        default:
-            $prefix = 'OPP';
-            $nextKey = 'nextOpportunityCode';
-            break;
+       default: // No valid site 
+       return '';
     }
 
     // Get Next Number
