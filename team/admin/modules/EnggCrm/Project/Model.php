@@ -355,9 +355,9 @@ class CPL_Admin_Modules_EnggCrm_Project_Model extends CP_Admin_Modules_EnggCrm_P
         $validate = Zend_Registry::get('validate');
 
         $validate->resetErrorArray();
-        $validate->validateData('title', 'Please enter the title');
+        //$validate->validateData('title', 'Please enter the title');
         //$validate->validateData('company_id', 'Please select company name');
-        $validate->validateData('category', 'Please select category');
+        //$validate->validateData('category', 'Please select category');
         //$validate->validateData('start_date', 'Please select start date');
         //$validate->validateData('estimated_finish_date', 'Please select estimated finish date');
         

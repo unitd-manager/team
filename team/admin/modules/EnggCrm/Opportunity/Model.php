@@ -952,7 +952,8 @@ class CPL_Admin_Modules_EnggCrm_Opportunity_Model extends CP_Admin_Modules_EnggC
 
     /**
      *
-        */function getUpdateAddQuoteCode()
+        */
+    function getUpdateAddQuoteCode()
 {
     $db = Zend_Registry::get('db');
 
@@ -1227,7 +1228,7 @@ class CPL_Admin_Modules_EnggCrm_Opportunity_Model extends CP_Admin_Modules_EnggC
 
         case 2:
             $prefix = 'KSA';
-            $nextKey = 'nextOpportunityCode_SA';
+            $nextKey = 'nextOpportunityCode_KWT';
             break;
 
        default: // No valid site 

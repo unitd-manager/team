@@ -74,7 +74,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_Model extends CP_Common_Lib_
         return $quoteRows."_".$quote_id;
     }
 
-     /**
+     /** 
      *
      */
     function getUpdateAddQuoteCode() {
@@ -746,7 +746,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_Model extends CP_Common_Lib_
     /**
      *
      */
-    function getCreationModificationQuote() {
+    function getCreationModificationQuote3() {
         $db      = Zend_Registry::get('db');
         $fn      = Zend_Registry::get('fn');
         $tv      = Zend_Registry::get('tv');

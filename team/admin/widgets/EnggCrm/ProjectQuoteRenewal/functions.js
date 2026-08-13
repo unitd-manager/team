@@ -65,12 +65,12 @@ $(function(){
         }
     });
 
-    $(".viewQuoteLog").livequery('click', function (e){
+    $(".viewQuoteLog1").livequery('click', function (e){
         var renewal_id = $(this).attr('renewal_id');
 
         Util.showProgressInd();
 
-        var url = "index.php?widget=enggCrm_projectQuoteRenewal&_spAction=viewQuoteLog&renewal_id="+renewal_id+"&showHTML=0";
+        var url = "index.php?widget=enggCrm_projectQuoteRenewal&_spAction=viewQuoteLog1&renewal_id="+renewal_id+"&showHTML=0";
         var exp = {
             url: url
         };
@@ -90,12 +90,12 @@ $(function(){
         }
     });
 
-    $(".creationModificationQuote").livequery('click', function (e){
+    $(".creationModificationQuote3").livequery('click', function (e){
         var quote_id = $(this).attr('quote_id');
 
         Util.showProgressInd();
 
-        var url = "index.php?widget=enggCrm_projectQuoteRenewal&_spAction=creationModificationQuote&quote_id="+quote_id+"&showHTML=0";
+        var url = "index.php?widget=enggCrm_projectQuoteRenewal&_spAction=creationModificationQuote3&quote_id="+quote_id+"&showHTML=0";
         var exp = {
             url: url
         };

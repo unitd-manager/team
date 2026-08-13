@@ -62,7 +62,7 @@ $(function(){
     
 
 
-    $(".creationModificationQuote").livequery('click', function (e){
+    $(".creationModificationQuote1").livequery('click', function (e){
         var delivery_note_id = $(this).attr('delivery_note_id');
 
         Util.showProgressInd();

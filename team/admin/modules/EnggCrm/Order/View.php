@@ -785,7 +785,7 @@ switch ($site_id) {
                         </table>';
         } else {
             $tbl3 = $tbl3.''.$discountRow.'<tr>
-                              <td align="right" colspan="2" style="font-size:10px; font-weight:bold; border-top:1px solid #000;border-right:1px solid #000;"></td>
+                              <td align="right" colspan="2" style="font-size:10px; font-weight:bold; border:1px solid #000;border-right:1px solid #000;">Invoice Amount In '.$currency.' : '.$amount_in_words.'</td>
                               <td colspan="3" align="right" style="font-size:10px; border-top:1px solid #000;border-right:1px solid #000; border-top:1px solid #000; border-bottom:1px solid #000; font-weight:bold;">Total Excluding Gst</td>
                               <td align="right" style="font-size:10px; font-weight:bold; border-top:1px solid #000; border-right:1px solid #000; border-top:1px solid #000; border-bottom:1px solid #000;">'.number_format($totalvalue, 3).'</td>
                            </tr>
@@ -4527,8 +4527,8 @@ if ($site_id == 1) {
                                 </tr>
                                   <br/>
                                 <tr>
-                                    <td width="25%" style="font-size:10px;line-height:16px;font-weight:bold;"> PO</td>
-                                    <td width="75%" style="font-size:10px;line-height:16px;">:</td>
+                                    <td width="25%" style="font-size:10px;line-height:16px;font-weight:bold;"></td>
+                                    <td width="75%" style="font-size:10px;line-height:16px;"></td>
                                 </tr>
                                
                             </table>

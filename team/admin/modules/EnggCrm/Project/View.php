@@ -629,7 +629,7 @@ class CPL_Admin_Modules_EnggCrm_Project_View extends CP_Admin_Modules_EnggCrm_Pr
                         </div>
                         <div class='row'>
                         <div class='col-md-4 col-sm-6 col-xs-12'>{$formObj->getTBRow('Client Po', 'client_po', $row['client_po'])}</div>
-                        <div class='col-md-2 col-sm-6 col-xs-12'>{$formObj->getTBRow('Po Amount', 'po_amount',  $row['po_amount'])}</div>
+                        <div class='col-md-2 col-sm-6 col-xs-12'>{$formObj->getTBRow('Po Amount', 'po_amount',  (!empty($row['po_amount']) ? $row['po_amount'] : 0.00))}</div>
                         <div class='col-md-4 col-sm-6 col-xs-12'>{$formObj->getTBRow('Po Reference No', 'po_ref_no', $row['po_ref_no'])}</div>
                     </div>
                          <!-- <div class='row'>

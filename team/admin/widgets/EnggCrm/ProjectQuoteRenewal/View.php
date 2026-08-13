@@ -174,7 +174,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_View extends CP_Common_Lib_W
               <tbody class='quoteDetailRow'>
                   <tr class='addQuoteRow  {$cancelledQuoteStatus}'>
                       <td data-label='Quote Code'>
-                          <a class='creationModificationQuote' quote_id='{$row['quote_id']}'>
+                          <a class='creationModificationQuote3' quote_id='{$row['quote_id']}'>
                               <u>{$row['quote_code']}</u>
                           </a>
                       </td>
@@ -2130,7 +2130,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_View extends CP_Common_Lib_W
     /**
      *
      */
-    function getViewQuoteLog() {
+    function getViewQuoteLog1() {
         $db       = Zend_Registry::get('db');
         $fn       = Zend_Registry::get('fn');
         $cpCfg    = Zend_Registry::get('cpCfg');
@@ -2234,7 +2234,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_View extends CP_Common_Lib_W
                   <tr class='addQuoteRow  {$cancelledQuoteStatus}'>
                       <td>{$row['revision']}</td>
                       <td>
-                          <a class='creationModificationQuote' quote_log_id='{$row['quote_log_id']}'>
+                          <a class='creationModificationQuote3' quote_log_id='{$row['quote_log_id']}'>
                             <u>{$row['quote_code']}</u>
                           </a>
                       </td>
@@ -2363,7 +2363,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_View extends CP_Common_Lib_W
                   <tr class='addQuoteRow  {$cancelledQuoteStatus}'>
                       <td>{$row['revision']}</td>
                       <td>
-                          <a class='creationModificationQuote' quote_log_id='{$row['quote_log_id']}'>
+                          <a class='creationModificationQuote3' quote_log_id='{$row['quote_log_id']}'>
                               <u>{$row['quote_code']}</u>
                           </a>
                       </td>

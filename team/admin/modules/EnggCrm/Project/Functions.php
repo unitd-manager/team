@@ -10,6 +10,8 @@ class CPL_Admin_Modules_EnggCrm_Project_Functions Extends CP_Admin_Modules_EnggC
         $modObj = $modules->getModuleObj('enggCrm_project');
         $modules->registerModule($modObj, array(
             'actBtnsList'      => array()
+             ,'tableName' => 'project'
+           ,'keyField' => 'project_id'
            ,'actBtnsDetail'    => array('edit')
            ,'actBtnsEdit'      => array('save', 'apply')
            ,'relatedTables'    => array('media')

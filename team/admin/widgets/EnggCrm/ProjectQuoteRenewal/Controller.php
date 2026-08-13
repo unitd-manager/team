@@ -27,8 +27,8 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_Controller extends CP_Common
 
     /**
     */
-    function getCreationModificationQuote() {
-        return $this->model->getCreationModificationQuote();
+    function getCreationModificationQuote3() {
+        return $this->model->getCreationModificationQuote3();
     }
 
     /**
@@ -149,7 +149,7 @@ class CPL_Admin_Widgets_EnggCrm_ProjectQuoteRenewal_Controller extends CP_Common
 
     /**
     */
-    function getViewQuoteLog(){
-        return $this->view->getViewQuoteLog();
+    function getViewQuoteLog1(){
+        return $this->view->getViewQuoteLog1();
     }
 }
